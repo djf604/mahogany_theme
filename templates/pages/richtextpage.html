@@ -1,0 +1,19 @@
+{% extends 'pages/page.html' %}
+{% load static mezzanine_tags %}
+
+{% block all_content %}
+<div class="container">
+    <div class="row mahogany-section">
+        <div class="mahogany-small-heading">{{ page.richtextpage.title }}</div>
+    </div>
+    <div class="row">
+        <div class="richtext-content">
+            {% editable page.richtextpage.content %}
+            {{ page.richtextpage.content|richtext_filters|safe }}
+            {% endeditable %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock all_content %}

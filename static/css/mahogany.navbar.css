@@ -1,0 +1,91 @@
+/** Theme colors
+  * #353D06 -> Dark Green
+  * #99460F -> Mahogany New -> #863D0D
+  * #CEA32D -> Mustard Yellow
+  * #410B13 -> Dark Brown
+  * #E2DBB7 -> White Cream
+  */
+
+.mahogany-billboard{
+    background: url('/static/img/photo-two.jpg') no-repeat center;
+    background-size: cover;
+    height: 300px;
+    position: relative;
+}
+.mahogany-below-billboard-left{
+    border-bottom: 25px solid #863D0D;
+	border-right: 50px solid transparent;
+    height:0;
+    width: 50%;
+    position: absolute;
+    bottom: 0;
+}
+.mahogany-below-billboard-right{
+    border-bottom: 25px solid #863D0D;
+	border-left: 50px solid transparent;
+    height:0;
+    left:50%;
+    width: 50%;
+    position: absolute;
+    bottom: 0;
+}
+
+.mahogany-social-links{
+    display: flex;
+    flex-direction: column;
+    /*float:right;*/
+    position: absolute;
+    bottom: 25px;
+    right: 0;
+    margin-right: 16px;
+}
+.mahogany-social-links a {
+    margin: 8px auto;
+    display: inline-block;
+    font-size: 2.2em;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+.mahogany-social-links span:hover{
+    color: #df691a;
+}
+
+.navbar-mahogany {
+    border-radius: 0;
+    background: linear-gradient(#303030, transparent);
+    border: none;
+}
+
+.navbar-mahogany .navbar-brand {
+    /*padding-top: 8rem;*/
+    /*padding-bottom: 8rem;*/
+    margin-top: 60px;
+    margin-bottom: 50px;
+    font-size: 96px;
+}
+
+/*@media(min-width:)*/
+
+.navbar-mahogany .navbar-nav {
+
+}
+
+.nav > li > a {
+    background-color: transparent;
+    transition: color 0.2s;
+}
+.nav > li > a:hover {
+    background-color: transparent;
+    color: #df691a;
+}
+.nav > li > a.dropdown-toggle:hover {
+    background-color: transparent;
+    color: #df691a;
+}
+
+footer{
+    /*background: url('/static/img/photo-four-dark.jpg') no-repeat center;*/
+    background-size: cover;
+    height: 800px;
+    border: none;
+}

@@ -1,0 +1,122 @@
+{% extends "blog/blog_post_list.html" %}
+{% load mezzanine_tags comment_tags keyword_tags rating_tags i18n disqus_tags %}
+
+{% block meta_title %}{{ blog_post.meta_title }}{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% keywords_for blog_post as tags %}
+{% for tag in tags %}{% if not forloop.first %}, {% endif %}{{ tag }}{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ blog_post.description }}
+{% endmetablock %}{% endblock %}
+
+{% if settings.COMMENTS_DISQUS_SHORTNAME %}
+{% include "generic/includes/disqus_counts.html" %}
+{% endif %}
+
+{% block main_blog_panel %}
+    <!-- Blog post title -->
+    <div class="mahogany-blog-header">
+        <a href="/blog" style="float:right">
+            <span class="fa fa-arrow-circle-left"></span>&nbsp;&nbsp;Back
+        </a>
+        {% block blog_post_list_post_title %}
+        {% editable blog_post.title %}
+        <h2>{{ blog_post.title }}</h2>
+        {% endeditable %}
+        {% endblock %}
+    </div>
+
+    <!-- Blog post posted by -->
+    <div class="mahogany-blog-posted-by">
+        {% block blog_post_detail_postedby %}
+        {% editable blog_post.publish_date %}
+        <h6 class="post-meta">
+            <span class="fa fa-pencil-square-o"></span>&nbsp;&nbsp;
+            {% trans "Posted by" %}:
+            {% with blog_post.user as author %}
+            <a href="{% url "blog_post_list_author" author %}">{{ author.get_full_name|default:author.username }}</a>
+            {% endwith %}
+            {% blocktrans with sometime=blog_post.publish_date|timesince %}{{ sometime }} ago{% endblocktrans %}
+        </h6>
+        {% endeditable %}
+        {% endblock %}
+    </div>
+
+    <!-- Blog post content -->
+    <div class="mahogany-blog-post">
+        {% block blog_post_detail_content %}
+        {% editable blog_post.content %}
+        {{ blog_post.content|richtext_filters|safe }}
+        {% endeditable %}
+        {% endblock %}
+    </div>
+
+    <!-- Blog post tags -->
+    <div class="mahogany-blog-tags">
+        {% block blog_post_detail_keywords %}
+        {% keywords_for blog_post as tags %}
+        {% if tags %}
+        {% spaceless %}
+        <ul class="list-inline tags">
+            <li><span class="fa fa-tag"></span>&nbsp;&nbsp;{% trans "Tags" %}:</li>
+            {% for tag in tags %}
+            <li><a href="{% url "blog_post_list_tag" tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}</li>
+            {% endfor %}
+        </ul>
+        {% endspaceless %}
+        {% endif %}
+        {% endblock %}
+    </div>
+
+    <!-- Blog post next/previous links -->
+    <div class="mahogany-blog-links">
+        {% block blog_post_previous_next %}
+        <ul class="pager">
+        {% with blog_post.get_previous_by_publish_date as previous %}
+        {% if previous %}
+            <a href="{{ previous.get_absolute_url }}">
+                <span class="fa fa-arrow-circle-left"></span>&nbsp;&nbsp;{{ previous }}
+            </a>
+        {% endif %}
+        {% endwith %}
+        <span>&nbsp;|&nbsp;</span>
+        {% with blog_post.get_next_by_publish_date as next %}
+        {% if next %}
+            <a href="{{ next.get_absolute_url }}">
+                {{ next }}&nbsp;&nbsp;<span class="fa fa-arrow-circle-right"></span>
+            </a>
+        {% endif %}
+        {% endwith %}
+        </ul>
+        {% endblock %}
+    </div>
+
+    <!-- Blog post related posts -->
+    <div class="mahogany-blog-related">
+        {% block blog_post_detail_related_posts %}
+        {% if related_posts %}
+        <div id="related-posts">
+        <h3>{% trans 'Related posts' %}</h3>
+        <ul class="list-unstyled">
+        {% for post in related_posts %}
+        <li>
+            <a href="{{ post.get_absolute_url }}">
+                <span class="fa fa-external-link fa-flip-horizontal"></span>&nbsp;&nbsp;{{ post.title }}
+            </a>
+        </li>
+        {% endfor %}
+        </ul>
+        </div>
+        {% endif %}
+        {% endblock %}
+    </div>
+
+    <!-- Blog post Disqus widget -->
+    {% block blog_post_detail_comments %}
+    {% if blog_post.allow_comments %}{% comments_for blog_post %}{% endif %}
+    {% endblock %}
+
+{% endblock main_blog_panel %}

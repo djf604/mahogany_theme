@@ -1,0 +1,36 @@
+{% extends 'pages/page.html' %}
+{% load static mezzanine_tags %}
+{% block extra_css %}
+<link href="{% static 'css/mahogany_event.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+{% block all_content %}
+<div class="container">
+    {% if page.eventspage.heading %}
+    <div class="row mahogany-section">
+        <div class="mahogany-small-heading">{{ page.eventspage.heading }}</div>
+    </div>
+    {% endif %}
+    {% if page.eventspage.richtext_content %}
+    <div class="row">{{ page.eventspage.richtext_content|richtext_filters|safe }}</div>
+    {% endif %}
+    <div class="row">
+        {% for event in events %}
+        <div class="col-sm-4">
+            <div class="mahogany-event">
+                <div class="event-caption">
+                    {% if event.image %}<img src="{{ MEDIA_URL }}{{ event.image }}">{% endif %}
+                </div>
+                <div class="event-details">
+                    <span class="event-details-heading">{{ event.name }}</span>
+                    <span class="event-details-content">
+                        {{ event.time }}<br/>
+                        {{ event.location }}<br/>
+                        <span style="overflow-y:scroll;">{{ event.details }}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock all_content %}

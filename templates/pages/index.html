@@ -1,0 +1,69 @@
+{% extends 'pages/page.html' %}
+{% load static mezzanine_tags blog_tags %}
+{% block extra_js %}
+<!-- Soundcloud Widget API -->
+<script src="https://w.soundcloud.com/player/api.js"></script>
+<script>
+$(document).ready(function(){
+    var soundcloud = SC.Widget($('#sc-widget').attr('id'));
+    soundcloud.load('https://soundcloud.com/hannah-lee6472');
+});
+</script>
+{% endblock extra_js %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mahogany_event.css' %}"/>
+<style>
+    .mahogany-billboard{height:500px;}
+</style>
+{% endblock %}
+{% block all_content %}
+
+<div class="container">
+    <div class="row mahogany-section" style="margin-top:100px;">
+        <div class="col-sm-8">
+            <div class="mahogany-small-heading" style="margin-bottom:72px;">{{ page.homepage.heading }}</div>
+            <div style="margin-bottom:96px;border-bottom: 6px solid #353D06;">{{ page.homepage.content|richtext_filters|safe }}</div>
+            {% if page.homepage.youtube_url %}
+            <div class="row">
+                <iframe width="70%" height="315" style="margin: 0 auto;display:block" src="{{ page.homepage.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-sm-4">
+                <div class="mahogany-small-heading">Next Event</div>
+                {% if next_event %}
+                <div class="mahogany-event">
+                    <div class="event-caption">
+                        {% if next_event.image %}<img src="{{ MEDIA_URL }}{{ next_event.image }}">{% endif %}
+                    </div>
+                    <div class="event-details" style="height:auto">
+                        <span class="event-details-heading">{{ next_event.name }}</span>
+                        <span class="event-details-content">{{ next_event.time }}<br/>{{ next_event.location }}<br/>{{ next_event.details }}</span>
+                    </div>
+                </div>
+                {% else %}
+                <div>No upcoming events</div>
+                {% endif %}
+            <div class="mahogany-small-heading" style="margin-top:96px;margin-bottom:36px;">Blog Posts</div>
+            <div class="mahogany-recent-posts">
+                {% blog_recent_posts 5 as recent_posts %}
+                <ul>
+                    {% for recent_post in recent_posts %}
+                        <li>
+                            <a href="{{ recent_post.get_absolute_url }}">
+                                <span class="fa fa-bookmark-o"></span>&nbsp;&nbsp;{{ recent_post.title }}
+                            </a><br/>
+                            &nbsp;&nbsp;{% with sometime=recent_post.publish_date|timesince %}{{ sometime }} ago{% endwith %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% if page.homepage.soundcloud_url %}
+    <div class="row">
+        <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=http://api.soundcloud.com/users/1539950/favorites" width="100%" height="465" scrolling="no" frameborder="no"></iframe>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
